@@ -4,7 +4,14 @@ PREFIX = '/r21'
 
 def patch_html(content):
     # Fix href/src/as attributes that reference root-local paths, not protocol-relative (//) or external
-    return re.sub(r'((?:href|src|as)=")(/)(?!/)', r'\1' + PREFIX + r'\2', content)
+    content = re.sub(r'((?:href|src|as)=")(/)(?!/)', r'\1' + PREFIX + r'\2', content)
+    # Fix url(/...) in inline CSS @font-face and other CSS url() references
+    content = re.sub(r'(url\()(/)(?!/)', r'\1' + PREFIX + r'\2', content)
+    return content
+
+def patch_css(content):
+    # Fix url(/...) in external CSS files
+    return re.sub(r'(url\()(/)(?!/)', r'\1' + PREFIX + r'\2', content)
 
 def patch_webpack_runtime(content):
     return content.replace('.p="/"', '.p="' + PREFIX + '/"')
@@ -34,6 +41,13 @@ for f in glob.glob('webpack-runtime-*.js'):
 for f in glob.glob('app-*.js'):
     orig = open(f, encoding='utf-8').read()
     patched = patch_app_js(orig)
+    if patched != orig:
+        open(f, 'w', encoding='utf-8').write(patched)
+        changed.append(f)
+
+for f in glob.glob('*.css'):
+    orig = open(f, encoding='utf-8').read()
+    patched = patch_css(orig)
     if patched != orig:
         open(f, 'w', encoding='utf-8').write(patched)
         changed.append(f)
