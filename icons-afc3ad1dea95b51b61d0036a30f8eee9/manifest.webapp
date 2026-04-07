@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "name": "alexson.",
+  "description": null,
+  "icons": {
+    "60": "/icons-afc3ad1dea95b51b61d0036a30f8eee9/firefox_app_60x60.png",
+    "128": "/icons-afc3ad1dea95b51b61d0036a30f8eee9/firefox_app_128x128.png",
+    "512": "/icons-afc3ad1dea95b51b61d0036a30f8eee9/firefox_app_512x512.png"
+  },
+  "developer": {
+    "name": null,
+    "url": null
+  }
+}
